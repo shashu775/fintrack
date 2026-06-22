@@ -1,0 +1,50 @@
+# Restricts the transaction-db Postgres pod to only accept connections
+# from transaction-service and ledger-service — nothing else in the
+# namespace (or outside it) can reach port 5432 on this pod.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: transaction-db-netpol
+  namespace: fintrack
+spec:
+  podSelector:
+    matchLabels:
+      app: transaction-db
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: transaction-service
+        - podSelector:
+            matchLabels:
+              app: ledger-service
+      ports:
+        - protocol: TCP
+          port: 5432
+---
+# Mirrors the same pattern for account-db: only account-service
+# and auth-service may connect.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: account-db-netpol
+  namespace: fintrack
+spec:
+  podSelector:
+    matchLabels:
+      app: account-db
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: account-service
+        - podSelector:
+            matchLabels:
+              app: auth-service
+      ports:
+        - protocol: TCP
+          port: 5432
