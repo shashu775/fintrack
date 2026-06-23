@@ -9,6 +9,9 @@ spec:
         matchLabels:
             app: accounts
     template:
+        metadata:
+           labels:
+               app: accounts
         spec: 
             containers:
             - name: accounts
@@ -22,7 +25,7 @@ spec:
               env:
                 - name: DATABASE_URL
                   valueFrom:
-                    ConfigMapKeyRef:
+                    configMapKeyRef:
                      name: account-service
                      key: DATABASE_URL
               envFrom:
