@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    namespace: fintrack
+    name: accounts
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: accounts
+    template:
+        spec: 
+            containers:
+            - name: accounts
+              image: travel2024/accounts
+              ports:
+                - containerPort: 8080
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 3000
+                fsGroup: 2000
+                runasNonRoot: true
+              env:
+                 name: DATABASE_URL
+                 valueFrom:
+                   RefConfigMap:
+                     name: account-service
+                     key: DATABASE_URL
+              envFrom:
+                - SecretRef:
+                    name: account-db-secrets
+              resources:
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"
+                requests:
+                  memory: "256Mi"
+                  cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: accounts
+    namespace: fintrack
+spec:
+    type: ClusterIP
+    selector:
+        app: accounts
+    ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: account-service
+    namespace: fintrack
+data:
+    DATABASE_URL: postgresql://postgres:postgres@account-db:5432/accounts
+
