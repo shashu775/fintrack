@@ -16,19 +16,14 @@ spec:
         spec:
             containers:
             - name: account-db
-              image: postgres:13
+              image: postgres:15
               ports:
               - containerPort: 5432
-              envFrom:
+              envFrom:            
               - configMapRef:
                   name: account-db-config
-                  key:
-                    - POSTGRES_DB
               - secretRef:
                   name: account-db-secrets  
-                  key:
-                    - POSTGRES_USER
-                    - POSTGRES_PASSWORD
               volumeMounts:
               - name: account-db-storage
                 mountPath: /var/lib/postgresql/data
@@ -39,7 +34,7 @@ spec:
                 limits:
                   memory: "1Gi"
                   cpu: "500m"
-            volumeClaimTemplates:   
+    volumeClaimTemplates:   
             - metadata:
                   name: account-db-storage
               spec:
@@ -54,7 +49,7 @@ metadata:
     name: account-db
     namespace: fintrack
 spec:
-    ClusterIP: None
+    clusterIP: None
     selector:
         app: account-db
     ports:  
@@ -78,3 +73,16 @@ metadata:
     namespace: fintrack
 data:
     POSTGRES_DB: account    
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: account-db-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /data/account-db
