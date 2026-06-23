@@ -12,18 +12,17 @@ spec:
         spec: 
             containers:
             - name: accounts
-              image: travel2024/accounts
+              image: travel2024/account-service
               ports:
                 - containerPort: 8080
               securityContext:
                 runAsUser: 1000
                 runAsGroup: 3000
-                fsGroup: 2000
-                runasNonRoot: true
+                runAsNonRoot: true
               env:
-                 name: DATABASE_URL
-                 valueFrom:
-                   RefConfigMap:
+                - name: DATABASE_URL
+                  valueFrom:
+                    ConfigMapKeyRef:
                      name: account-service
                      key: DATABASE_URL
               envFrom:
