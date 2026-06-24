@@ -61,4 +61,4 @@ metadata:
     namespace: fintrack
 type: Opaque
 stringData:
-    DATABASE_URL: postgresql://admin:password@account-db:5432/accounts
+    DATABASE_URL: postgresql://admin:password@account-db:5432/account
