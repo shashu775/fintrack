@@ -59,5 +59,6 @@ kind: Secret
 metadata:
     name: account-service
     namespace: fintrack
-data:
+type: Opaque
+stringData:
     DATABASE_URL: postgresql://admin:password@account-db:5432/accounts
