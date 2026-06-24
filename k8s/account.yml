@@ -25,7 +25,7 @@ spec:
               env:
                 - name: DATABASE_URL
                   valueFrom:
-                    configMapKeyRef:
+                    secretKeyRef:
                      name: account-service
                      key: DATABASE_URL
               envFrom:
@@ -55,10 +55,9 @@ spec:
       name: http
 ---
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
     name: account-service
     namespace: fintrack
 data:
-    DATABASE_URL: postgresql://postgres:postgres@account-db:5432/accounts
-
+    DATABASE_URL: postgresql://admin:password@account-db:5432/accounts
