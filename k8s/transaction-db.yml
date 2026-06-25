@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+    namespace: fintrack
+    name: transaction-service-db
+spec:
+    serviceName: transaction-service-db
+    replicas: 1
+    selector:
+        matchLabels:
+            app: transaction-service-db
+    template:
+        metadata: 
+            labels:
+               app: transaction-service-db
+        spec:
+           containers: 
+             - name: transaction-service-db
+               image: postgres:15
+               envFrom:
+                  - configMapRef:
+                       name: transaction-service-db-config
+                  - secretRef:
+                       name: transaction-db-secrets
+               volumeMounts:
+                    - name: transaction-db-storage
+                      mountPath: /var/lib/postgresql/data
+               resources:
+                  requests:
+                      memory: "512Mi" 
+                      cpu: "250m"
+                  limits:
+                      memory: "1Gi"
+                      cpu: "512m"                       
+    volumeClaimTemplates:
+       - metadata: 
+            name: transaction-db-storage
+         spec: 
+            accessModes: ["ReadWriteOnce"]
+            resouces: 
+               request: 
+                  storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transaction-service-db-config
+  namespace: fintrack
+data:
+   POSTGRES_DB: transaction
+---
+apiVersion: v1
+kind: Secrets
+metadata:
+   name: transaction-db-secrets
+   namespace: fintrack
+type: Opaque
+data:
+   POSTGRES_USER : YWRtaW4K
+   POSTGRES_PASSWORD : cGFzc3dvcmQK
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+   name: transaction-db-pv
+spec:  
+   capacity: 
+      storage: 1 Gi
+   accessModes:
+       - ReadWriteOnce
+   persistentVolumeClaimPolicy : Retain
+   hostPath: 
+      path: /data/transaction-db
+      type: DirectoryOrCreate
+
+
+
