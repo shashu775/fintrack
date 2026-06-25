@@ -17,6 +17,8 @@ spec:
            containers: 
              - name: transaction-service-db
                image: postgres:15
+               ports: 
+                  - containerPort: 5432
                envFrom:
                   - configMapRef:
                        name: transaction-service-db-config
@@ -40,6 +42,18 @@ spec:
             resouces: 
                request: 
                   storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  transaction-service-db
+spec:
+  clusterIP: None
+  selector:
+    app:  transaction-service-db
+  ports:
+  - port: 5432
+    protocol: TCP
 ---
 apiVersion: v1
 kind: ConfigMap
