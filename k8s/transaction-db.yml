@@ -39,8 +39,8 @@ spec:
             name: transaction-db-storage
          spec: 
             accessModes: ["ReadWriteOnce"]
-            resouces: 
-               request: 
+            resources: 
+               requests: 
                   storage: 1Gi
 ---
 apiVersion: v1
@@ -64,7 +64,7 @@ data:
    POSTGRES_DB: transaction
 ---
 apiVersion: v1
-kind: Secrets
+kind: Secret
 metadata:
    name: transaction-db-secrets
    namespace: fintrack
@@ -79,10 +79,10 @@ metadata:
    name: transaction-db-pv
 spec:  
    capacity: 
-      storage: 1 Gi
+      storage: 1Gi
    accessModes:
        - ReadWriteOnce
-   persistentVolumeClaimPolicy : Retain
+   persistentVolumeReclaimPolicy : Retain
    hostPath: 
       path: /data/transaction-db
       type: DirectoryOrCreate
