@@ -21,9 +21,9 @@ spec:
                   - containerPort: 5432
              envFrom:
                   - configMapRef:
-                       name: ledger-db-config
+                       name: ledger-config
                   - secretRef:
-                       name: ledger-db-secrets
+                       name: ledger-secrets
              volumeMounts:
                     - name: ledger-db-storage
                       mountPath: /var/lib/postgresql/data
