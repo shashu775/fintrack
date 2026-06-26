@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+    namespace: fintrack
+    name: ledger-db
+spec:
+    serviceName: ledger-db
+    replicas: 1
+    selector: 
+       matchLabels: 
+        app: ledger-db
+    template: 
+       metadata: 
+         labels:
+          app: ledger-db
+       spec: 
+           containers: 
+           - name: ledger-db
+             image: postgres:15
+             ports: 
+                  - containerPort: 5432
+             envFrom:
+                  - configMapRef:
+                       name: ledger-db-config
+                  - secretRef:
+                       name: ledger-db-secrets
+             volumeMounts:
+                    - name: ledger-db-storage
+                      mountPath: /var/lib/postgresql/data
+             resources:
+                  requests:
+                      memory: "250Mi" 
+                      cpu: "125m"
+                  limits:
+                      memory: "500Mi"
+                      cpu: "256m"                       
+    volumeClaimTemplates:
+       - metadata: 
+            name: ledger-db-storage
+         spec: 
+            accessModes: ["ReadWriteOnce"]
+            resources: 
+               requests: 
+                  storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  ledger-db
+spec:
+  clusterIP: None
+  selector:
+    app:  ledger-db
+  ports:
+  - port: 5432
+    protocol: TCP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ledger-db-config
+  namespace: fintrack
+data:
+   POSTGRES_DB: transaction
+---
+apiVersion: v1
+kind: Secret
+metadata:
+   name: ledger-secrets
+   namespace: fintrack
+type: Opaque
+stringData:
+   POSTGRES_USER : admin
+   POSTGRES_PASSWORD : password
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+   name: ledger-pv
+spec:  
+   capacity: 
+      storage: 1Gi
+   accessModes:
+       - ReadWriteOnce
+   persistentVolumeReclaimPolicy : Retain
+   hostPath: 
+      path: /data/ledger-db
+      type: DirectoryOrCreate
+
