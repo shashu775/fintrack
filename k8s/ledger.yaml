@@ -15,17 +15,17 @@ spec:
     spec:
       containers:
         - name: ledger-service
-          image: travle2024/ledger-service
+          image: travel2024/ledger-service
           ports:
             - containerPort: 8000
           env:
             - name: DATABASE_URL
               value: postgresql://postgres:postgres@ledger-db:5432/ledger
-            - configMapRef:
-                 name: redis-streams-config
           envFrom:
             - secretRef:
                 name: ledger-secrets
+            - configMapRef:
+                 name: redis-streams-config    
           resources:
             requests:
               cpu: 100m
