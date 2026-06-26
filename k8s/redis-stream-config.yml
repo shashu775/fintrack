@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-streams-config
+  namespace: fintrack
+data:
+  REDIS_HOST: "redis.fintrack.svc.cluster.local"
+  REDIS_PORT: "6379"
+  STREAM_TRANSACTIONS_CREATED: "stream:transactions.created"
+  STREAM_TRANSACTIONS_COMPLETED: "stream:transactions.completed"
+  STREAM_LEDGER_UPDATED: "stream:ledger.updated"
+  STREAM_BALANCE_CHANGED: "stream:account.balance.changed"

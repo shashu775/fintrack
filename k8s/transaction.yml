@@ -62,7 +62,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-    name: account-service
+    name: transaction-service
     namespace: fintrack
 type: Opaque
 stringData:
