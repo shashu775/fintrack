@@ -28,7 +28,7 @@ spec:
             - secretRef:
                 name: transaction-service
             - configMapRef:
-                 name: redis-stream-config    
+                 name: redis-streams-config    
           resources:
             requests:
               cpu: 100m
