@@ -67,3 +67,5 @@ metadata:
 type: Opaque
 stringData:
     DATABASE_URL: postgresql://admin:password@transaction-service-db:5432/transaction
+    DATABASE_USER: YWRtaW4=
+    DATABASE_PASSWORD: cGFzc3dvcmQ=
