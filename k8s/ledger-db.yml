@@ -22,6 +22,8 @@ spec:
              envFrom:
                   - configMapRef:
                        name: ledger-config
+                  - configMapRef:
+                       name: ledger-db-config    
                   - secretRef:
                        name: ledger-secrets
              volumeMounts:
@@ -70,7 +72,7 @@ metadata:
    namespace: fintrack
 type: Opaque
 stringData:
-   DATABASE_NAME: ledger
+   
    POSTGRES_USER : admin
    POSTGRES_PASSWORD : password
 ---
@@ -87,4 +89,12 @@ spec:
    hostPath: 
       path: /data/ledger-db
       type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: ledger-db-config
+    namespace: fintrack
+data:
+    POSTGRES_DB: ledger 
 
