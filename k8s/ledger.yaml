@@ -20,7 +20,7 @@ spec:
             - containerPort: 8000
           env:
             - name: DATABASE_URL
-              value: postgresql://postgres:postgres@ledger-db:5432/ledger
+              value: postgresql://admin:password@ledger-db:5432/ledger
           envFrom:
             - secretRef:
                 name: ledger-secrets

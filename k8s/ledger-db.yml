@@ -70,6 +70,7 @@ metadata:
    namespace: fintrack
 type: Opaque
 stringData:
+   DATABASE_NAME: ledger
    POSTGRES_USER : admin
    POSTGRES_PASSWORD : password
 ---
