@@ -63,7 +63,7 @@ metadata:
   name: ledger-config
   namespace: fintrack
 data:
-   POSTGRES_DB: transaction
+   POSTGRES_DB: ledger
 ---
 apiVersion: v1
 kind: Secret
@@ -89,12 +89,5 @@ spec:
    hostPath: 
       path: /data/ledger-db
       type: DirectoryOrCreate
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-    name: ledger-db-config
-    namespace: fintrack
-data:
-    POSTGRES_DB: ledger 
+
 
