@@ -21,9 +21,7 @@ spec:
                   - containerPort: 5432
              envFrom:
                   - configMapRef:
-                       name: ledger-config
-                  - configMapRef:
-                       name: ledger-db-config    
+                       name: ledger-config 
                   - secretRef:
                        name: ledger-secrets
              volumeMounts:
@@ -49,6 +47,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name:  ledger-db
+  namespace: fintrack
 spec:
   clusterIP: None
   selector:
