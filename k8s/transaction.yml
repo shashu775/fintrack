@@ -26,7 +26,7 @@ spec:
                     key: DATABASE_URL
           envFrom:
             - secretRef:
-                name: fintrack-secrets
+                name: transaction-service
             - configMapRef:
                  name: redis-stream-config    
           resources:
