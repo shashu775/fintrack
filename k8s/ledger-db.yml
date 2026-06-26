@@ -58,7 +58,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ledger-db-config
+  name: ledger-config
   namespace: fintrack
 data:
    POSTGRES_DB: transaction
